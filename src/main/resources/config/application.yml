@@ -1,0 +1,28 @@
+# 开启swagger
+swagger:
+  enable: true
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://121.36.209.254:3306/test?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2b8
+    username: root
+    password: 18255061722Zx!
+    hikari.maximum-pool-size: 100
+    hikari.minimum-idle: 10
+    hikari.connection-timeout: 20000
+    hikari.pool-name: chros_hikari_pool
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+mybatis:
+  mapperLocations: classpath*:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+mybatis-plus:
+  typeEnumsPackage: com.advance_warn.enums

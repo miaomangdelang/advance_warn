@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.advance_warn.dao.RealtimeEventBranchMapper">
+    <resultMap id="BaseResultMap" type="com.advance_warn.model.entity.RealtimeEventBranch">
+        <!--@mbg.generated-->
+        <!--@Table realtime_event_branch-->
+        <result column="eventid" jdbcType="INTEGER" property="eventid" />
+        <result column="branch_id" jdbcType="INTEGER" property="branchId" />
+        <result column="branch_name" jdbcType="VARCHAR" property="branchName" />
+        <result column="branch_type_id" jdbcType="INTEGER" property="branchTypeId" />
+        <result column="event_value" jdbcType="VARCHAR" property="eventValue" />
+        <result column="event_name" jdbcType="VARCHAR" property="eventName" />
+        <result column="event_time" jdbcType="VARCHAR" property="eventTime" />
+        <result column="event_no" jdbcType="INTEGER" property="eventNo" />
+        <result column="event_state" jdbcType="VARCHAR" property="eventState" />
+        <result column="event_handle" jdbcType="VARCHAR" property="eventHandle" />
+        <result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+        <result column="meas_point_seq" jdbcType="INTEGER" property="measPointSeq" />
+        <result column="alertlevel" jdbcType="VARCHAR" property="alertlevel" />
+        <result column="latest_time" jdbcType="VARCHAR" property="latestTime" />
+        <result column="event_desc" jdbcType="VARCHAR" property="eventDesc" />
+        <result column="meas_point_type_id" jdbcType="VARCHAR" property="measPointTypeId" />
+        <result column="raw_branch_id" jdbcType="VARCHAR" property="rawBranchId" />
+        <result column="is_run" jdbcType="VARCHAR" property="isRun" />
+    </resultMap>
+
+  <select id="findRealtimeEventBranchPage" resultType="com.advance_warn.model.dto.RealtimeEventBranchPageDetailDTO">
+        SELECT
+            reb.eventid id,
+            reb.branch_name branchName,
+            reb.event_name eventName,
+            reb.event_time eventTime,
+            reb.event_value eventValue,
+            reb. event_state eventState
+        FROM realtime_event_branch reb
+            Left JOIN meas_point_branch_map mpbm on reb.branch_id = mpbm.branch_id
+            Left JOIN terminal_meas_point tmp on mpbm.meas_point_seq = tmp.meas_point_seq and mpbm.terminal_id = tmp.terminal_id
+            Left Join terminal t on mpbm.terminal_id = t.terminal_id
+            left join sysuserdept s2 on t.deptid = s2.deptid
+            left join sysuser s3 on s2.userid = s3.userid
+      <where>
+          <if test="query.endDate">
+              AND reb.event_time <![CDATA[ <= ]]> CONCAT(#{query.endDate}, ' 23:59:59')
+          </if>
+          <if test="query.beginDate">
+              AND CONCAT(#{query.beginDate}, ' 00:00:00') <![CDATA[ <= ]]> reb.event_time
+          </if>
+          <if test="query.eventState">
+              AND reb.event_state = #{query.eventState}
+          </if>
+          <if test="query.loginName">
+              AND s3.loginname = #{query.loginName}
+          </if>
+      </where>
+      group by reb.eventid
+  </select>
+
+</mapper>
