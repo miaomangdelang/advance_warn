@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
  *
@@ -35,7 +36,7 @@ public class RealtimeEventBranchController {
 	 */
 	@ApiOperation(value = "事件列表查询", notes = "事件列表查询")
 	@GetMapping("/queryList")
-	public OperationResult<RealtimeEventBranchPageResponse> queryList(RealtimeEventBranchPageInput input) {
+	public OperationResult<RealtimeEventBranchPageResponse> queryList(@Valid RealtimeEventBranchPageInput input) {
 		return realtimeEventBranchService.findRealtimeEventBranchPage(input);
 	}
 
