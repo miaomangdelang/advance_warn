@@ -1,3 +1,6 @@
+server:
+  port: 80
+
 # 开启swagger
 swagger:
   enable: true
